@@ -72,7 +72,11 @@ export default {
       }
     },
     onChangeOption() {
-      this.isChanged = true
+      if (this.selectedOption == -1) {
+        this.isChanged = false
+      } else {
+        this.isChanged = true
+      }
     }
   }
 }
