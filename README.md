@@ -5,7 +5,7 @@
 Freetube is like free and ad-free Youtube and it is created with NuxtJS
 
 # Preview
-![preview](doc/preview.gif)
+You can watch preview from [here](https://youtu.be/oCXmQME4cXs)
 
 ## Build Setup
 install dependencies
