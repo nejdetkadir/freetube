@@ -8,17 +8,11 @@ RUN apk add git
 
 COPY . /usr/src/freetube/
 RUN npm install
-
-# for production
-# RUN npm run build
+RUN npm run build
 
 EXPOSE 3000
 
 ENV NUXT_HOST=0.0.0.0
 ENV NUXT_PORT=3000
 
-
-# for production
-# CMD [ "npm", "start" ]
-
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "start" ]

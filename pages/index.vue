@@ -46,7 +46,6 @@ export default {
       try {
         const res = await this.$axios.post('/api/youtube', {url: this.url})
         if (res.data.validation) {
-          console.log(res.data.result);
           this.result = res.data.result
           this.isError = null
         } else {
