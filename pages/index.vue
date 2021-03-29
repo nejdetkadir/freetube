@@ -19,7 +19,7 @@
                 .card-text
                   select.form-select(v-model="selectedOption" @change="onChangeOption")
                     option(value="-1") Please select a type
-                    option(v-for="(format, index) in result.formats" :key="index" :value="index") {{format.container}}({{format.mimeType.split(";")[0]}})  quality({{format.quality}})
+                    option(v-for="(format, index) in result.formats" :key="index" :value="index") {{format.container}}({{format.mimeType.split(";")[0]}})---quality({{format.quality}})---hasVideo({{format.hasVideo}})---hasAudio({{format.hasAudio}})
                   .text-center.mt-3
                     .alert.alert-info.mb-2.mt-2(v-if="isChanged") You can download or {{this.result.formats[this.selectedOption].mimeType.split(";")[0].split("/")[0] == "video" ? "watch" : "listen"}} anymore! 
                     button.btn.btn-danger.btn-sm(@click.prevent="watchResult")
@@ -46,6 +46,7 @@ export default {
       try {
         const res = await this.$axios.post('/api/youtube', {url: this.url})
         if (res.data.validation) {
+          console.log(res.data.result);
           this.result = res.data.result
           this.isError = null
         } else {
