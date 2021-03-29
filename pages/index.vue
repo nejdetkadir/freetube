@@ -7,25 +7,24 @@
             img.img-fluid(src="~/assets/logo.png" width="250")
           .alert.alert-danger.text-center(v-if="isError") {{isError}}
           .input-group.mb-3
-            input.form-control(type='text' v-model="url")
-            button.btn.btn-danger(:disabled="isLoading" @click.prevent="getVideo()") {{isLoading ? 'Loading...&nbsp;' : 'GET VIDEO&nbsp;'}}
+            input.form-control(type='text' v-model="url" placeholder="Paste your Youtube URL")
+            button.btn.btn-danger(:disabled="isLoading" @click.prevent="getVideo()") {{isLoading ? 'LOADING...&nbsp;' : 'GET VIDEO&nbsp;'}}
               i.fas.fa-search
-          .result-area(v-if="isSuccess")
+          .result-area(v-if="result")
             hr
             .card
-              img.card-img-top(src='https://avatars.githubusercontent.com/u/50639655?v=4')
+              img.card-img-top(:src='result.videoDetails.thumbnails[result.videoDetails.thumbnails.length-1].url')
               .card-body
-                h5.card-title Video title
+                h5.card-title {{result.videoDetails.title}}
                 .card-text
-                  select.form-select(aria-label='Default select example')
-                    option(selected='') Please select a type
-                  .d-flex.justify-content-evenly.mt-3
+                  select.form-select(v-model="selectedOption" @change="onChangeOption")
+                    option(value="-1") Please select a type
+                    option(v-for="(format, index) in result.formats" :key="index" :value="index") {{format.container}}({{format.mimeType.split(";")[0]}})  quality({{format.quality}})
+                  .text-center.mt-3
+                    .alert.alert-info.mb-2.mt-2(v-if="isChanged") You can download or {{this.result.formats[this.selectedOption].mimeType.split(";")[0].split("/")[0] == "video" ? "watch" : "listen"}} anymore! 
                     button.btn.btn-danger.btn-sm(@click.prevent="watchResult")
-                      | Watch&nbsp;
+                      | Show&nbsp;
                       i.fas.fa-eye
-                    button.btn.btn-success.btn-sm(@click.prevent="downloadResult")
-                      | Download&nbsp;
-                      i.fas.fa-download
 </template>
 
 <script>
@@ -33,32 +32,47 @@ export default {
   data() {
     return {
       isLoading: false,
-      isSuccess: false,
       isError: null,
+      isChanged: false,
       url: null,
-      result: null
+      result: null,
+      selectedOption: '-1'
     }
   },
   methods: {
     async getVideo() {
+      this.isLoading = true
+      this.result = null
       try {
         const res = await this.$axios.post('/api/youtube', {url: this.url})
-        console.log(res.data)
         if (res.data.validation) {
-          this.result = res.data
+          this.result = res.data.result
           this.isError = null
         } else {
           this.isError = "Please check your URL"
         }
+        this.isLoading = false
       } catch (error) {
-        console.log(this.error);
+        this.isLoading = false
+        this.isError = "There is an error :("
       }
     },
     watchResult() {
-      console.log("watchResult");
+      if (this.checkOption()) {
+        window.open(this.result.formats[this.selectedOption].url, '_blank').focus();
+      }
     },
-    downloadResult() {
-      console.log("downloadResult");
+    checkOption() {
+      if (this.selectedOption == -1) {
+        this.isError = "Please select a type"
+        return false
+      } else {
+        this.isError = null
+        return true
+      }
+    },
+    onChangeOption() {
+      this.isChanged = true
     }
   }
 }
