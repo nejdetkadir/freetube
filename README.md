@@ -1,8 +1,13 @@
+[![Docker](https://img.shields.io/docker/pulls/nejdetkadirr/freetube.svg)](https://hub.docker.com/r/nejdetkadirr/freetube)
+
 # Freetube
+![cover](doc/cover.png)
 Freetube is like free and ad-free Youtube and it is created with NuxtJS
 
-## Build Setup
+# Preview
+![preview](doc/preview.gif)
 
+## Build Setup
 install dependencies
 ```bash
 $ yarn install
