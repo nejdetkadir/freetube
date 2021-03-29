@@ -5,6 +5,7 @@
         .col-md-6.mx-auto.mt-5.mb-5
           .text-center
             img.img-fluid(src="~/assets/logo.png" width="250")
+          .alert.alert-danger.text-center(v-if="isError") {{isError}}
           .input-group.mb-3
             input.form-control(type='text' v-model="url")
             button.btn.btn-danger(:disabled="isLoading" @click.prevent="getVideo()") {{isLoading ? 'Loading...&nbsp;' : 'GET VIDEO&nbsp;'}}
@@ -33,17 +34,25 @@ export default {
     return {
       isLoading: false,
       isSuccess: false,
-      url: null
+      isError: null,
+      url: null,
+      result: null
     }
   },
   methods: {
-    getVideo() {
-      console.log(this.url);
-      this.isLoading = true
-      setTimeout(() => {
-        this.isSuccess = true
-        this.isLoading = false
-      }, 1500);
+    async getVideo() {
+      try {
+        const res = await this.$axios.post('/api/youtube', {url: this.url})
+        console.log(res.data)
+        if (res.data.validation) {
+          this.result = res.data
+          this.isError = null
+        } else {
+          this.isError = "Please check your URL"
+        }
+      } catch (error) {
+        console.log(this.error);
+      }
     },
     watchResult() {
       console.log("watchResult");
