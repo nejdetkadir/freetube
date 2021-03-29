@@ -1,7 +1,6 @@
-<template>
-  <div class="container">
-    <h2>hi nuxt</h2>
-  </div>
+<template lang="pug">
+  .container
+    h1 hi nuxt
 </template>
 
 <script>
