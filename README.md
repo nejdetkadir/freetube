@@ -28,5 +28,14 @@ generate static project
 ```bash
 $ yarn generate
 ```
+## You can use with docker
+Pull from docker hub
+```bash
+$ docker pull nejdetkadirr/freetube:1.0.0
+```
+Then run it
+```
+$ docker run -p <your port>:3000 <image id or vs.>
+```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
